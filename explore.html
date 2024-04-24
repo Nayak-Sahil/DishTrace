@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Explore Dish</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Nunito&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Lato", sans-serif;
+        font-weight: bold;
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              clifford: "#da373d",
+              theme: "#ff4e4e",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  
+  <body ng-app="userModule">
+    <nav class="bg-white shadow py-4">
+      <div class="container mx-auto flex justify-between items-center">
+        <!-- <div class="flex items-center">
+          <a href="#" class="text-gray-600 hover:text-gray-800"
+            ><i class="mr-1 text-sm fa-solid fa-magnifying-glass"></i> Search</a
+          >
+          <a href="#" class="ml-8 text-gray-600 hover:text-gray-800"
+            ><i class="mr-1 text-sm fa-regular fa-bookmark"></i> Saved</a
+          >
+        </div> -->
+        <h1 class="text-xl text-theme">DishTrace</h1>
+        <div class="flex items-center">
+          <div
+            ng-controller="userController"
+            class="flex items-center"
+          >
+            <i class="fa-regular fa-user"></i>
+            <p class="ml-2 text-gray-600">{{ userId }}</p>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <section ng-controller="searchController" class="w-full h-screen">
+      <div class="mx-auto mt-2 w-screen max-w-screen-md py-10 leading-6">
+        <form ng-submit="searchFood()"
+          class="relative mx-auto flex w-full max-w-2xl items-center justify-between rounded-md shadow"
+        >
+          <input
+            type="text"
+            ng-model="foodInpt"
+            class="h-14 w-full rounded-md py-4 pr-40 pl-5 outline-none focus:ring-2 focus:ring-theme"
+            placeholder="Enter a vegitables, fruits..."
+          />
+          <button
+            class="absolute right-0 mr-1 inline-flex h-12 items-center justify-center rounded-lg bg-theme px-10 font-medium text-white focus:ring-4 opacity-50 hover:opacity-100"
+          >
+            <i class="mr-3 fa-solid fa-magnifying-glass"></i>
+            Search
+          </button>
+        </form>
+      </div>
+
+      <p class="text-base text-green-500 text-center w-full">{{ message }}</p>
+
+      <div ng-repeat="foodItem in foodArray" class="m-5 h-max border-2 border-gray-100">
+        <div class="h-max px-5 py-5 border-b flex items-center justify-between">
+          <h1 class="text-slate-700">{{ foodItem.title }}</h1>
+          <!-- <button
+            type="submit"
+            class="inline-flex h-12 items-center justify-center rounded-lg bg-slate-700 px-10 font-medium text-white focus:ring-4 opacity-50 hover:opacity-100"
+          >
+            <i class="mr-2 text-sm fa-regular fa-bookmark"></i>
+            Save
+          </button> -->
+        </div>
+        <div class="h-max flex items-center p-10 justify-between">
+          <img
+            src={{foodItem.image}}
+            alt="food"
+            width="500"
+          />
+          <div class="h-[400px] overflow-y-auto rounded-xl border shadow">
+            <table
+              class="min-w-full w-[500px] border-separate border-spacing-y-2 border-spacing-x-2"
+            >
+              <thead class="hidden border-b lg:table-header-group">
+                <tr class="">
+                  <td
+                    width="50%"
+                    class="whitespace-normal py-4 text-sm font-medium text-gray-500 sm:px-6"
+                  >
+                    Nutrition
+                  </td>
+
+
+                  <td
+                    class="text-right whitespace-normal py-4 text-sm font-medium text-gray-500 sm:px-6"
+                  >
+                    Amount
+                  </td>
+
+                  <!-- <td
+                    class="whitespace-normal py-4 text-sm font-medium text-gray-500 sm:px-6"
+                  >
+                    Recipes
+                  </td> -->
+                </tr>
+              </thead>
+
+              <tbody class="lg:border-gray-300">
+                <tr ng-repeat="foodItem in foodItem.nutrition.nutrients" class="">
+                  <td
+                    width="50%"
+                    class="whitespace-no-wrap py-4 text-sm font-bold text-gray-900 sm:px-6"
+                  >
+                    {{foodItem.name}}
+                    <div class="mt-1 lg:hidden">
+                      <p class="font-normal text-gray-500">07 February, 2022</p>
+                    </div>
+                  </td>
+
+                  <td
+                    class="whitespace-no-wrap text-right text-theme hidden py-4 text-sm font-normal text-gray-500 sm:px-6 lg:table-cell"
+                  >
+                  {{foodItem.amount}} {{foodItem.unit}}
+                  </td>
+
+                  <!-- <td
+                    class="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-500 sm:px-6 lg:table-cell"
+                  >
+                    <div
+                      class="inline-flex items-center rounded-full bg-blue-600 py-2 px-3 text-xs text-white"
+                    >
+                    {{foodItem.id}}
+                    </div>
+                  </td> -->
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="./scripts/explore.js"></script>
+  </body>
+</html>
